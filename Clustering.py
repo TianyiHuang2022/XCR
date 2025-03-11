@@ -253,13 +253,13 @@ def train_idec():
             xn_bar, qn, _ = model(xn)
             _, hidden = model.ae(x)
 
-            feat_detach = x.detach()
+            feat_detach = hidden.detach()
             feat_row, feat_col = PairEnum(feat_detach)
             tmp_distance_ori = ((feat_row - feat_col) ** 2.).sum(1).view(x.size(0), x.size(0))
             tmp_distance_ori = CKROD(tmp_distance_ori, 10)
             tmp_distance_ori = tmp_distance_ori.cpu().float()
             target_ulb = torch.zeros_like(tmp_distance_ori).float()
-            target_ulb[tmp_distance_ori < torch.kthvalue(tmp_distance_ori, 5, 0, True)[0]] = 1
+            target_ulb[tmp_distance_ori < torch.kthvalue(tmp_distance_ori, 15, 0, True)[0]] = 1
             target_ulb = target_ulb.mul(torch.exp(-0.2*tmp_distance_ori))
             target_ulb = target_ulb.view(-1)
 
@@ -332,8 +332,6 @@ if __name__ == "__main__":
     print("use cuda: {}".format(args.cuda))
     device = torch.device("cuda" if args.cuda else "cpu")
 
-    #if args.dataset == 'mnist':
-    #    args.pretrain_path = 'data/ae_mnist.pkl'
     args.n_input = 784
     dataset = fashionDataset()
     Y = dataset.y
