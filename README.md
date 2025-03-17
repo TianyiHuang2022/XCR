@@ -1,4 +1,4 @@
-# HCHC
+# XCR
 Python implementation of XCR. Run "clustering.py" for clustering and then run "PCAMapping.py" for visualization. If you use our code or data, please cite "X-Clustering Beyond Contextual Representations".
 
 
